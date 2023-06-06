@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\ProfileController;
@@ -24,11 +25,21 @@ Route::get('/', function () {
 //})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth', 'verified')->prefix('admin')->name('admin.')->group(function () {
+
+    //project resource
     Route::resource('projects', ProjectController::class);
+
+    //contacts routes
+    Route::get('contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::delete('contacts/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+
+    //dashboard routes
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    //Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    //Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    //Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //Profile routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__ . '/auth.php';
